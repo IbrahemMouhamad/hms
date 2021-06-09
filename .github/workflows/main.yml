@@ -42,7 +42,7 @@ jobs:
           pylint ./hms --output-format=json > ./pylint_report/pylint_checks.json || exit_code=`echo $?` || true
           pylint-json2html -o ./pylint_report/pylint_checks.html ./pylint_report/pylint_checks.json
           exit ${exit_code}
-      - name: Upload artifacts
+      - name: Upload pylint artifacts
         if: failure()
         uses: actions/upload-artifact@v2
         with:
