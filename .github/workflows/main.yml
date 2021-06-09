@@ -38,6 +38,7 @@ jobs:
         run: |
           mkdir -p pylint_report
           echo "Pylint version: "`pylint --version | head -1`
+          ls -l
           pylint . --output-format=json
       - name: Run Tests # run all tests
         run: |
