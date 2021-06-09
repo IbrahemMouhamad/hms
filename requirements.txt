@@ -38,3 +38,6 @@ six==1.16.0
 sqlparse==0.4.1
 uritemplate==3.0.1
 urllib3==1.26.5
+pylint==2.7.0
+pylint-django==2.3.0
+pylint-plugin-utils==0.6
