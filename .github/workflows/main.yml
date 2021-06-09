@@ -36,8 +36,17 @@ jobs:
           pip install -r requirements.txt
       - name: Check code quality # using pylint
         run: |
+          pip install pylint-json2html
+          mkdir -p pylint_report
           echo "Pylint version: "`pylint --version | head -1`
-          pylint ./hms --output-format=json
+          pylint ./hms --output-format=json > ./pylint_report/pylint_checks.json || exit_code=`echo $?` || true
+          pylint-json2html -o ./pylint_report/pylint_checks.html ./pylint_report/pylint_checks.json
+      - name: Upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: pylint_report
+          path: pylint_report
       - name: Run Tests # run all tests
         run: |
           python manage.py test
