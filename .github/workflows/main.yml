@@ -48,6 +48,8 @@ jobs:
         with:
           name: pylint_report
           path: pylint_report
+      - name: Run Migrations # run migrations to create tables
+        run: python manage.py migrate
       - name: Run Tests # run all tests
         run: |
-          python manage.py test
+          manage.py test  hms/apps
