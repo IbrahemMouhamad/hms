@@ -52,4 +52,4 @@ jobs:
         run: python manage.py migrate
       - name: Run Tests # run all tests
         run: |
-          manage.py test  hms/apps
+          python manage.py test  hms/apps
