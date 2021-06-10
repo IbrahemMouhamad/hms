@@ -41,3 +41,4 @@ urllib3==1.26.5
 pylint==2.7.0
 pylint-django==2.3.0
 pylint-plugin-utils==0.6
+coveralls
