@@ -142,8 +142,8 @@ class Doctor(models.Model):
                 patient=patient,
                 diagnosis=diagnosis
             )
-        except Diagnosis.DoesNotExist:
-            raise Exception('Can not find the diagnosis, please enter a valid diagnosis name')
+        except Diagnosis.DoesNotExist as e:
+            raise e
 
     def get_patients(self):
         return Patient.objects.all().filter(doctor__id=self.id)
