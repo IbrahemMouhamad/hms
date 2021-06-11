@@ -40,6 +40,7 @@ def wrap_swagger(view):
     return _map_format_to_schema
 
 router = routers.DefaultRouter(trailing_slash=False)
+router.register('doctors', views.DoctorViewSet)
 
 urlpatterns = [
     # Entry point for a client
