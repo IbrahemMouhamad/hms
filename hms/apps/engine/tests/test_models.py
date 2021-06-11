@@ -6,7 +6,10 @@ from django.test import TestCase
 from django.db.models import QuerySet
 from django.contrib.auth.models import Group, User
 
-from hms.apps.engine.models import Hospital, Department, Staff, Person, Doctor, StaffTypeChoice, Patient, Prescription
+from hms.apps.engine.models import (
+    Hospital, Department, Staff, Person, Doctor, StaffTypeChoice, Patient, Prescription,
+    Diagnosis
+)
 
 
 def create_dummy_db_hospital(obj, name, address):
@@ -183,6 +186,20 @@ class DoctorTestCase(TestCase):
         prescriptions = Prescription.objects.all().filter(patient__id = patient1.id)
         self.assertIsInstance(prescriptions, QuerySet)
         self.assertEqual(prescriptions.count(), 1)
+
+    def test_write_prescription_failed(self):
+        doctor1 = Doctor.objects.get(person__user__username=self.name)
+        patient1 = Patient.objects.get(person__user__username=self.patient1_name)
+        # writing a prescription for the patient should failed because of wrong diagnosis object
+        self.assertRaises(
+            Diagnosis.DoesNotExist,
+            doctor1.write_prescription,
+                patient1,
+                name=self.prescription1_name,
+                description=self.prescription1_des,
+                diagnosis="wrong name"
+            )
+
 
 def mock_get_dector():
     user = User(username="doctor1", email="",password="doctor1")
