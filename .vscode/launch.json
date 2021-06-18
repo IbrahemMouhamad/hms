@@ -94,8 +94,8 @@
         {
             "name": "server: debug",
             "configurations": [
-                "server: django",
-                "server: git"
+                "server: django"
+                //"server: git"
             ]
         }
     ]

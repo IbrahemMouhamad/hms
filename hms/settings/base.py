@@ -2,9 +2,6 @@
 
 import os
 import sys
-import fcntl
-import shutil
-import subprocess
 
 from pathlib import Path
 

@@ -15,25 +15,49 @@ jobs:
       matrix:
         python-version: [3.7]
     steps:
-    - name: Checkout code # checking our the code at current commit that triggers the workflow
+      - name: Checkout code # checking our the code at current commit that triggers the workflow
         uses: actions/checkout@v2
-    - name: Cache dependency # caching dependency will make build faster.
+      - name: Cache dependency # caching dependency will make our build faster.
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-    - name: Setup python environment ${{ matrix.python-version }} # setup the required python version
+      - name: Setup python environment ${{ matrix.python-version }} # setup the required python version
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-    - name: Check Python version # checking the python version to see if 3.7 is installed.
+      - name: Check Python version # checking the python version to see if 3.7 is installed.
         run: python --version
-    - name: Install Dependencies # install all required libraries
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests # run all tests
-      run: |
-        python manage.py test
+      - name: Install Dependencies # install all required libraries
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pylint-json2html
+      - name: Check code quality # using pylint
+        run: |
+          mkdir -p pylint_report
+          echo "Pylint version: "`pylint --version | head -1`
+          pylint ./hms --output-format=json > ./pylint_report/pylint_checks.json || exit_code=`echo $?` || true
+          pylint-json2html -o ./pylint_report/pylint_checks.html ./pylint_report/pylint_checks.json
+          exit ${exit_code}
+      - name: Upload pylint artifacts
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: pylint_report
+          path: pylint_report
+      - name: Run Migrations # run migrations to create tables
+        run: python manage.py migrate
+      - name: Run Tests # run all tests
+        run: |
+          coverage run manage.py test hms/apps
+          coverage report
+          mkdir -p coverage_report
+          coverage html -d ./coverage_report
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage_report
+          path: coverage_report

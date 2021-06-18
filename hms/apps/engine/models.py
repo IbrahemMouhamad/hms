@@ -126,6 +126,28 @@ class Doctor(models.Model):
     class Meta:
         default_permissions = ()
 
+    def check_up(self, name, description):
+        return Diagnosis.objects.create(
+            name=name,
+            description=description,
+            specialist=self
+        )
+
+    def write_prescription(self, patient, name, description, diagnosis):
+        try:
+            diagnosis = Diagnosis.objects.get(name=diagnosis)
+            return Prescription.objects.create(
+                name=name,
+                description=description,
+                patient=patient,
+                diagnosis=diagnosis
+            )
+        except Diagnosis.DoesNotExist as e:
+            raise e
+
+    def get_patients(self):
+        return Patient.objects.all().filter(doctor__id=self.id)
+
 class Nurse(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="nurse_person")
     degree = models.CharField(max_length=256, null=False, blank=False)
@@ -180,7 +202,7 @@ class Prescription(models.Model):
     name = models.CharField(max_length=256, null=False, blank=False)
     description = models.CharField(max_length=1024, null=False, blank=False)
     patient = models.ForeignKey(Patient, null=False, blank=False,
-        on_delete=models.CASCADE, related_name="owner")
+        on_delete=models.CASCADE, related_name="prescription")
     diagnosis = models.OneToOneField(Diagnosis, on_delete=models.CASCADE, related_name="prescription_diagnosis")
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -212,6 +234,17 @@ class Employee(models.Model):
     person = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="employee_person")
     staff = models.ForeignKey(Staff, null=False, blank=False,
         on_delete=models.CASCADE, related_name="employee_staff")
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        default_permissions = ()
+
+class Appointment(models.Model):
+    date = models.DateField(null=False)
+    room_number = models.IntegerField(null=False)
+    patient = models.OneToOneField(Patient, on_delete=models.CASCADE, related_name="appointment_patient")
+    doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name="appointment_doctor")
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
