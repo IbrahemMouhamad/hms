@@ -25,7 +25,6 @@ DATABASES = {
     }
 }
 
-
 # Cross-Origin Resource Sharing settings for HMS UI
 UI_SCHEME = os.environ.get('UI_SCHEME', 'http')
 UI_HOST = os.environ.get('UI_HOST', 'localhost')

@@ -239,3 +239,14 @@ class Employee(models.Model):
 
     class Meta:
         default_permissions = ()
+
+class Appointment(models.Model):
+    date = models.DateField(null=False)
+    room_number = models.IntegerField(null=False)
+    patient = models.OneToOneField(Patient, on_delete=models.CASCADE, related_name="appointment_patient")
+    doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name="appointment_doctor")
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        default_permissions = ()
