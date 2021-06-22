@@ -66,6 +66,7 @@ jobs:
             node-version: 12
       - name: Start Backend server
         run: |
+          echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@localhost.hms', 'admin@2021')" | python manage.py shell
           python manage.py runserver &
       - name: Start UI server
         run: |
