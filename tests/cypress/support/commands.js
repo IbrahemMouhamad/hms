@@ -1,8 +1,8 @@
 // Copyright (C) 2021 Ibrahem Mouhamad
 
 Cypress.Commands.add('login', (username = Cypress.env('user'), password = Cypress.env('password')) => {
-    cy.get('[type="text"]').type(username);
-    cy.get('[type="password"]').type(password);
+    cy.get('[type="text"]').clear().type(username);
+    cy.get('[type="password"]').clear().type(password);
     cy.get('[type="submit"]').click();
     cy.url().should('match', /\/hospital$/);
 });
