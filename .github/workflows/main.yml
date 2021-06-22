@@ -68,12 +68,12 @@ jobs:
         run: |
           cd ./hms-ui
           yarn install
-          yarn start
+          yarn start &
           echo "Waiting UI to launch on 3000..."
           while ! nc -z localhost 3000; do
             sleep 5 # wait for 5 seconds before check again
           done
-          cd ./tests
+          cd ../tests
           npm ci
           npx cypress run --headless --browser chrome
       - name: Uploading cypress screenshots as an artifact
