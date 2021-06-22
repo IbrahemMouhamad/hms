@@ -11,6 +11,7 @@
       "password": "admin@2021"
     },
     "testFiles": [
-      "auth_page.js"
+      "auth_page.js",
+      "actions_users/**/*.js"
     ]
   }

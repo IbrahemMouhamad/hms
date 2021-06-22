@@ -29,7 +29,7 @@ class HospitalViewSet(viewsets.ModelViewSet):
     queryset = models.Hospital.objects.all().order_by('-id')
     search_fields = ("name", "address")
     ordering_fields = ("id", "name")
-    http_method_names = ['get', 'post', 'head', 'patch', 'delete']
+    http_method_names = ['get', 'post', 'head', 'put', 'delete']
 
     def get_serializer_class(self):
         return HospitalSerializer

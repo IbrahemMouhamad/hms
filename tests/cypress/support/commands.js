@@ -1,25 +1,15 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+// Copyright (C) 2021 Ibrahem Mouhamad
+
+Cypress.Commands.add('login', (username = Cypress.env('user'), password = Cypress.env('password')) => {
+    cy.get('[type="text"]').type(username);
+    cy.get('[type="password"]').type(password);
+    cy.get('[type="submit"]').click();
+    cy.url().should('match', /\/hospital$/);
+});
+
+Cypress.Commands.add('logout', (username = Cypress.env('user')) => {
+    cy.get('button[aria-label="Profile"]').click();
+    cy.get('.logout').click();
+    cy.url().should('include', '/login');
+    cy.visit('/login'); // clear query parameter "next"
+});

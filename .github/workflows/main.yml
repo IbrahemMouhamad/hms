@@ -64,7 +64,10 @@ jobs:
       - uses: actions/setup-node@v2 # Setup Nodejs
         with:
             node-version: 12
-      - name: End-to-end testing
+      - name: Start Backend server
+        run: |
+          python manage.py runserver &
+      - name: Start UI server
         run: |
           cd ./hms-ui
           yarn install
@@ -73,6 +76,8 @@ jobs:
           while ! nc -z localhost 3000; do
             sleep 5 # wait for 5 seconds before check again
           done
+      - name: End-to-end testing
+        run: |
           cd ../tests
           npm ci
           npx cypress run --headless --browser chrome
