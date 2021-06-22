@@ -1,0 +1,15 @@
+{
+    "baseUrl": "http://localhost:3000",
+    "viewportWidth": 1300,
+    "viewportHeight": 960,
+    "defaultCommandTimeout": 25000,
+    "downloadsFolder": "cypress/fixtures",
+    "env": {
+      "user": "admin",
+      "email": "admin@localhost.company",
+      "password": "admin@2021"
+    },
+    "testFiles": [
+      "auth_page.js"
+    ]
+  }
