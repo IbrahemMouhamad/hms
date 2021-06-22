@@ -67,6 +67,7 @@ jobs:
       - name: End-to-end testing
         run: |
           cd ./hms-ui
+          yarn install
           yarn start
           echo "Waiting UI to launch on 3000..."
           while ! nc -z localhost 3000; do
