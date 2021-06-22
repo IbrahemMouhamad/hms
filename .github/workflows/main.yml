@@ -78,7 +78,7 @@ jobs:
           done
       - name: End-to-end testing
         run: |
-          cd ../tests
+          cd ./tests
           npm ci
           npx cypress run --headless --browser chrome
       - name: Uploading cypress screenshots as an artifact
