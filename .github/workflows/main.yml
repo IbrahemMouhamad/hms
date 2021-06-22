@@ -61,3 +61,23 @@ jobs:
         with:
           name: coverage_report
           path: coverage_report
+      - uses: actions/setup-node@v2 # Setup Nodejs
+        with:
+            node-version: 12
+      - name: End-to-end testing
+        run: |
+          cd ./hms-ui
+          yarn start
+          echo "Waiting UI to launch on 3000..."
+          while ! nc -z localhost 3000; do
+            sleep 5 # wait for 5 seconds before check again
+          done
+          cd ./tests
+          npm ci
+          npx cypress run --headless --browser chrome
+      - name: Uploading cypress screenshots as an artifact
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress_screenshots
+          path: ${{ github.workspace }}/tests/cypress/screenshots
